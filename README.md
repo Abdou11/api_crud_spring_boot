@@ -1,4 +1,4 @@
-Simple CRUD model api with ( spring boot , swagger 2 , H2 , spring data ..)
+Simple CRUD model api with Spring Boot
 
 # Swagger : 
 
