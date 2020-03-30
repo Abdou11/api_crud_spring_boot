@@ -11,3 +11,4 @@ Simple CRUD model api with Spring Boot
 - `POST` /api/contacts --createContact
 - `GET` /api/contacts/{id} --getContact
 - `DELETE`  /api/contacts/{id} --deleteContact
+- `PUT`  /api/contacts --updateContact
