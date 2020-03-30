@@ -11,10 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,9 +28,9 @@ import com.springangular.service.ContactService;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 
-
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class ContactController {
 
 	private final Logger log = LoggerFactory.getLogger(ContactController.class);
@@ -51,32 +53,35 @@ public class ContactController {
 		log.debug("REST request to get all Contacts");
 		return contactService.findAll();
 	}
-	
-	 /**
-     * {@code GET  /contacts/:id} : get the "id" contact.
-     *
-     * @param id the id of the contact to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the contact, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/contacts/{id}")
-    public ResponseEntity<Contact> getContact(@PathVariable Long id) {
-        log.debug("REST request to get contacts : {}", id);
-        Optional<Contact> contacts = contactService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(contacts);
-    }
-    
-    /**
-     * {@code DELETE  /contacts/:id} : delete the "id" contact.
-     *
-     * @param id the id of the contact to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/contacts/{id}")
-    public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
-        log.debug("REST request to delete contacts : {}", id);
-        contactService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
-    }
+
+	/**
+	 * {@code GET  /contacts/:id} : get the "id" contact.
+	 *
+	 * @param id the id of the contact to retrieve.
+	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+	 *         the contact, or with status {@code 404 (Not Found)}.
+	 */
+	@GetMapping("/contacts/{id}")
+	public ResponseEntity<Contact> getContact(@PathVariable Long id) {
+		log.debug("REST request to get contacts : {}", id);
+		Optional<Contact> contacts = contactService.findOne(id);
+		return ResponseUtil.wrapOrNotFound(contacts);
+	}
+
+	/**
+	 * {@code DELETE  /contacts/:id} : delete the "id" contact.
+	 *
+	 * @param id the id of the contact to delete.
+	 * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+	 */
+	@DeleteMapping("/contacts/{id}")
+	public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
+		log.debug("REST request to delete contacts : {}", id);
+		contactService.delete(id);
+		return ResponseEntity.noContent()
+				.headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+				.build();
+	}
 
 	/**
 	 * {@code POST  /contacts} : Create a new contact.
@@ -97,6 +102,28 @@ public class ContactController {
 		return ResponseEntity
 				.created(new URI("/api/contacts/" + result.getId())).headers(HeaderUtil
 						.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+				.body(result);
+	}
+
+	/**
+	 * {@code PUT  /contacts} : Updates an existing contact.
+	 *
+	 * @param contact the contact to update.
+	 * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+	 *         the updated contact, or with status {@code 400 (Bad Request)} if the
+	 *         contact is not valid, or with status {@code 500 (Internal Server Error)}
+	 *         if the contact couldn't be updated.
+	 * @throws URISyntaxException if the Location URI syntax is incorrect.
+	 */
+	@PutMapping("/contacts")
+	public ResponseEntity<Contact> updateContact(@Valid @RequestBody Contact contact) throws URISyntaxException {
+		log.debug("REST request to update contact : {}", contact);
+		if (contact.getId() == null) {
+			throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+		}
+		Contact result = contactService.save(contact);
+		return ResponseEntity.ok().headers(
+				HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, contact.getId().toString()))
 				.body(result);
 	}
 

@@ -36,6 +36,10 @@ public class ContactsApplication implements CommandLineRunner {
 				LocalDate.parse("1992-02-19")));
 		contactRepos.save(new Contact("Ahlam", "Mourad", "06954888", "Mourad@gmail.com", "photo.png",
 				LocalDate.parse("1992-03-19")));
+		contactRepos.save(new Contact("xoxo", "fofo", "06954888", "fofo@gmail.com", "photo.png",
+				LocalDate.parse("1992-04-19")));
+		contactRepos.save(new Contact("nono", "osos", "06954888", "osos@gmail.com", "photo.png",
+				LocalDate.parse("1992-05-19")));
 	}
 	
 	@Bean
