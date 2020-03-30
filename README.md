@@ -1,8 +1,8 @@
-Simple CRUD model api with spring boot swagger 2
+Simple CRUD model api with Spring Boot
 
 # Swagger : 
 
-- `UI`   : http://localhost:8080/swagger-ui.html#/
+- `UI`   : http://localhost:8080/swagger-ui.html
 - `Docs` : http://localhost:8080/v2/api-docs
 
 # API : 
